@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Horizontal sharding demo</title>
+        <style>
+            html {
+                padding: 30px 10px;
+                font-size: 20px;
+                line-height: 1.4;
+                color: #737373;
+                background: #f0f0f0;
+                -webkit-text-size-adjust: 100%;
+                -ms-text-size-adjust: 100%;
+            }
+
+            html,
+            input {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            }
+
+            body {}
+
+            .container {
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <ol>
+            {% for user in users %}
+                <li>{{ user.name }}, {{ user.profile.email }}, {{ user.profile.address }}</li>
+            {% endfor %}
+            </ol>
+            <hr>
+            <form action="{% url 'core.views.add_user' %}" method="POST">{% csrf_token %}
+                <div id="user_form">
+                    <h3>Add user</h3>
+                    <p>Name: {{ userform.name }}</p>
+                    <p>E-Mail: {{ profileform.email }}</p>
+                    <p>Address: {{ profileform.address }}</p>
+                </div>
+                <div id="submit"><input type="submit" value="Submit"></div>
+            </form>
+        </div>
+    </body>
+</html>

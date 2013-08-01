@@ -15,26 +15,36 @@ class ShardingRouter(object):
 
     def db_for_read(self, model, **hints):
         table = self.get_model_table_name(model._meta.db_table)
-        print 'r', table, model, hints
-        #return False
-        if model._meta.app_label == 'Profile':
-            return 'profile1'
-        return 'default'
+        print hints
+        
+        if model._meta.app_label == 'core' and table == 'profile':
+            print model
+            instance = hints.get('instance')
+            if not instance:
+                return 'profile1'
+            
+            user_id = getattr(instance, 'user_id', None)
+            if not user_id:
+                return 'profile1'
+            
+            return 'profile2'
+        return None
+        
+        #if model._meta.app_label == 'core' and table == 'profile':
+        #    print 'r', table, model, hints, hints.get('instance')
+        #    return 'profile1'
+        #return 'default'
 
     def db_for_write(self, model, **hints):
         table = self.get_model_table_name(model._meta.db_table)
-        z = hints['instance']
-        print 'w', table, model, z, z.id
-        if model._meta.app_label == 'Profile':
-            return 'profile1'
+        if model._meta.app_label == 'core' and table == 'profile':
+            if hints['instance'].user_id < 11:
+                return 'profile1'
+            else:
+                return 'profile2'
         return 'default'
 
     def allow_relation(self, obj1, obj2, **hints):
-        if obj1._meta.app_label == 'chinook' and obj2._meta.app_label == 'chinook':
-            return True
-        # Allow if neither is chinook app
-        elif 'chinook' not in [obj1._meta.app_label, obj2._meta.app_label]: 
-            return True
         return False
 
     def allow_syncdb(self, db, model):

@@ -10,9 +10,12 @@ class User(models.Model):
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(User)
+    user_id = models.IntegerField()
     email = models.EmailField()
     address = models.TextField()
     
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
+    
     def __unicode__(self):  # Python 3: def __str__(self):
-        return '%s [%s]' % (self.user.name, self.email)
+        return self.email
