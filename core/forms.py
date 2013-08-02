@@ -6,6 +6,7 @@ class UserForm(ModelForm):
     class Meta:
         model = User
 
+
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
