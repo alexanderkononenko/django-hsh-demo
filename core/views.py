@@ -34,7 +34,7 @@ def add_user(request):
 def del_user(request, del_id):
     User.objects.get(pk=del_id).delete()
     #TODO This is not transparent solution
-    if del_id < 11:
+    if int(del_id) < 11:
         db_name = 'profile1'
     else:
         db_name = 'profile2'
